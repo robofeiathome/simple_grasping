@@ -45,9 +45,11 @@ from moveit_python.geometry import rotate_pose_msg_by_euler_angles
 from grasping_msgs.msg import *
 from moveit_msgs.msg import MoveItErrorCodes, PlaceLocation
 
-joint_names = ["shoulder_pan_joint", "shoulder_lift_joint", "upperarm_roll_joint",
-    "elbow_flex_joint", "forearm_roll_joint", "wrist_flex_joint", "wrist_roll_joint"]
-ready_pose = [-1.393150, -0.103543, 0, -1.608378, -0.458660, -0.1, -2.611218]
+joint_names = ["shoulder_pan_joint", "shoulder_lift_joint", "elbow_pan_joint",
+               "elbow_lift_joint", "wrist_pan_joint", "wrist_lift_joint"]
+
+ready_pose = [-1.393150, -0.103543, 0, -1.608378, -0.458660, -0.1]  # TODO: change this to the ready position
+
 
 def move_to_ready(interface):
    result = interface.moveToJointPosition(joint_names, ready_pose)
