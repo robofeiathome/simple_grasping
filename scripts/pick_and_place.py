@@ -74,7 +74,7 @@ if __name__=="__main__":
         move_to_ready(move_group)
         exit(0)
 
-    scene = PlanningSceneInterface("base_link")
+    scene = PlanningSceneInterface("base")
     pickplace = PickPlaceInterface("arm", "gripper", plan_only = args.plan, verbose = True)
 
     rospy.loginfo("Connecting to basic_grasping_perception/find_objects...")
