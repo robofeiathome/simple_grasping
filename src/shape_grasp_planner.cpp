@@ -79,9 +79,9 @@ ShapeGraspPlanner::ShapeGraspPlanner(ros::NodeHandle& nh)
    * that the robot is using the moveit_simple_controller_manager
    * gripper interface, with "parallel" parameter set to true.
    */
-  nh.param<std::string>("gripper/left_joint", left_joint_, "l_gripper_finger_joint");
-  nh.param<std::string>("gripper/right_joint", right_joint_, "r_gripper_finger_joint");
-  nh.param("gripper/max_opening", max_opening_, 0.110);
+  nh.param<std::string>("gripper/left_joint", left_joint_, "gripper_left_joint");
+  nh.param<std::string>("gripper/right_joint", right_joint_, "gripper_right_joint");
+  nh.param("gripper/max_opening", max_opening_, 0.110); // TODO: get from URDF
   nh.param("gripper/max_effort", max_effort_, 50.0);
   nh.param("gripper/finger_depth", finger_depth_, 0.02);
   nh.param("gripper/grasp_duration", grasp_duration_, 2.0);
