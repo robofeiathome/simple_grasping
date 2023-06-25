@@ -90,14 +90,14 @@ ShapeGraspPlanner::ShapeGraspPlanner(ros::NodeHandle& nh)
   /*
    * Approach is usually aligned with wrist_roll
    */
-  nh.param<std::string>("gripper/approach/frame", approach_frame_, "wrist_roll_link");
+  nh.param<std::string>("gripper/approach/frame", approach_frame_, "wrist_lift_link");// TODO: get from URDF
   nh.param("gripper/approach/min", approach_min_translation_, 0.1);
   nh.param("gripper/approach/desired", approach_desired_translation_, 0.15);
 
   /*
    * Retreat is usually aligned with wrist_roll
    */
-  nh.param<std::string>("gripper/retreat/frame", retreat_frame_, "wrist_roll_link");
+  nh.param<std::string>("gripper/retreat/frame", retreat_frame_, "wrist_lift_link");// TODO: get from URDF
   nh.param("gripper/retreat/min", retreat_min_translation_, 0.1);
   nh.param("gripper/retreat/desired", retreat_desired_translation_, 0.15);
 
