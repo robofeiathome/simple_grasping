@@ -52,24 +52,26 @@ ready_pose = [-1.393150, -0.103543, 0, -1.608378, -0.458660, -0.1]  # TODO: chan
 
 
 def move_to_ready(interface):
-   result = interface.moveToJointPosition(joint_names, ready_pose)
-   if result.error_code.val != 1:
-       rospy.sleep(1.0)
-       rospy.logerr("Move arm to ready position failed, trying again...")
-       result = interface.moveToJointPosition(joint_names, ready_pose, 0.02)
+    result = interface.moveToJointPosition(joint_names, ready_pose)
+    if result.error_code.val != 1:
+        rospy.sleep(1.0)
+        rospy.logerr("Move arm to ready position failed, trying again...")
+        result = interface.moveToJointPosition(joint_names, ready_pose, 0.02)
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Simple demo of pick and place")
     parser.add_argument("--objects", help="Just do object perception", action="store_true")
     parser.add_argument("--all", help="Just do object perception, but insert all objects", action="store_true")
     parser.add_argument("--once", help="Run once.", action="store_true")
     parser.add_argument("--ready", help="Move the arm to the ready position.", action="store_true")
     parser.add_argument("--plan", help="Only do planning, no execution", action="store_true")
-    parser.add_argument("--x", help="Recommended x offset, how far out an object should roughly be.", type=float, default=0.5)
+    parser.add_argument("--x", help="Recommended x offset, how far out an object should roughly be.", type=float,
+                        default=0.5)
     args, unknown = parser.parse_known_args()
 
     rospy.init_node("pick_and_place_demo")
-    move_group = MoveGroupInterface("arm", "base_link", plan_only = args.plan)
+    move_group = MoveGroupInterface("arm", "base_link", plan_only=args.plan)
 
     # if all we want to do is prepare the arm, do it now
     if args.ready:
@@ -77,7 +79,7 @@ if __name__=="__main__":
         exit(0)
 
     scene = PlanningSceneInterface("base")
-    pickplace = PickPlaceInterface("arm", "gripper", plan_only = args.plan, verbose = True)
+    pickplace = PickPlaceInterface("arm", "gripper", plan_only=args.plan, verbose=True)
 
     rospy.loginfo("Connecting to basic_grasping_perception/find_objects...")
     find_objects = actionlib.SimpleActionClient("basic_grasping_perception/find_objects", FindGraspableObjectsAction)
@@ -108,10 +110,10 @@ if __name__=="__main__":
         count = -1
         for obj in find_result.objects:
             count += 1
-            scene.addSolidPrimitive("object%d"%count,
+            scene.addSolidPrimitive("object%d" % count,
                                     obj.object.primitives[0],
                                     obj.object.primitive_poses[0],
-                                    wait = False)
+                                    wait=False)
             # object must have usable grasps
             if len(obj.grasps) < 1:
                 continue
@@ -132,23 +134,23 @@ if __name__=="__main__":
             # extend surface to floor
             height = obj.primitive_poses[0].position.z
             obj.primitives[0].dimensions = [obj.primitives[0].dimensions[0],
-                                            2.0, # make table wider
+                                            2.0,  # make table wider
                                             obj.primitives[0].dimensions[2] + height]
-            obj.primitive_poses[0].position.z += -height/2.0
+            obj.primitive_poses[0].position.z += -height / 2.0
 
             # add to scene
             scene.addSolidPrimitive(obj.name,
                                     obj.primitives[0],
                                     obj.primitive_poses[0],
-                                    wait = False)
+                                    wait=False)
 
-        obj_name = "object%d"%the_object
+        obj_name = "object%d" % the_object
 
         # sync
         scene.waitForSync()
 
         # set color of object we are grabbing
-        scene.setColor(obj_name, 223.0/256.0, 90.0/256.0, 12.0/256.0)  # orange
+        scene.setColor(obj_name, 223.0 / 256.0, 90.0 / 256.0, 12.0 / 256.0)  # orange
         scene.setColor(find_result.objects[the_object].object.support_surface, 0, 0, 0)  # black
         scene.sendColors()
 
@@ -193,7 +195,8 @@ if __name__=="__main__":
         rospy.loginfo("Beginning to place.")
         while not rospy.is_shutdown():
             # can't fail here or moveit needs to be restarted
-            success, place_result = pickplace.place_with_retry(obj_name, places, support_name=support_surface, scene=scene)
+            success, place_result = pickplace.place_with_retry(obj_name, places, support_name=support_surface,
+                                                               scene=scene)
             if success:
                 break
 
@@ -204,4 +207,3 @@ if __name__=="__main__":
         # rinse and repeat
         if args.once:
             exit(0)
-
