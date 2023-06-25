@@ -71,7 +71,7 @@ if __name__ == "__main__":
     args, unknown = parser.parse_known_args()
 
     rospy.init_node("pick_and_place_demo")
-    move_group = MoveGroupInterface("arm", "base_link", plan_only=args.plan)
+    move_group = MoveGroupInterface("arm", "base", plan_only=args.plan)
 
     # if all we want to do is prepare the arm, do it now
     if args.ready:
