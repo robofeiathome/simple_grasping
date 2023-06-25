@@ -88,7 +88,7 @@ public:
     range_filter_.setFilterLimits(0, 2.5);
 
     // Subscribe to head camera cloud
-    cloud_sub_ = nh_.subscribe< pcl::PointCloud<pcl::PointXYZRGB> >("/head_camera/depth_registered/points",
+    cloud_sub_ = nh_.subscribe< pcl::PointCloud<pcl::PointXYZRGB> >("/zed_node/point_cloud/cloud_registered",
                                                                      1,
                                                                      &BasicGraspingPerception::cloudCallback,
                                                                      this);
