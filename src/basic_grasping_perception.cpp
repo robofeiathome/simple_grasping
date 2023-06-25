@@ -62,7 +62,7 @@ public:
     nh_.param<bool>("continuous_detection", continuous_detection_, false);
 
     // frame_id: frame to transform cloud to (should be XY horizontal)
-    world_frame_ = "base_link";
+    world_frame_ = "base";
     nh_.getParam("frame_id", world_frame_);
 
     // Create planner
